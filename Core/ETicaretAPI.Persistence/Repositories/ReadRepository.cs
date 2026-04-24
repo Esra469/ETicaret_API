@@ -31,6 +31,8 @@ namespace ETicaretAPI.Persistence.Repositories
                  =>await Table.FirstOrDefaultAsync(method); //asenkron olduğu için await ekledim.
 
         public async Task<T> GetByIdAsync(string id)
-                 =>await Table.FirstOrDefaultAsync(data=>data.Id==Guid.Parse(id));//Generic T olarak belirtiğimzde Id belirtmezdik çünkü burası hala spesifik değil genl bir fonksiyon yazmaya çalışıyoruz. T:class yerine T:BaseEntity yazdık bu da dmek oluyor ki çağrılan en kötü bir baseentitydir. yani illaki onun içinde olan bir prop burada görünecektir.
+             // =>await Table.FirstOrDefaultAsync(data=>data.Id==Guid.Parse(id));//Generic T olarak belirtiğimzde Id belirtmezdik çünkü burası hala spesifik değil genl bir fonksiyon yazmaya çalışıyoruz. T:class yerine T:BaseEntity yazdık bu da dmek oluyor ki çağrılan en kötü bir baseentitydir. yani illaki onun içinde olan bir prop burada görünecektir.
+
+             => await Table.FindAsync(Guid.Parse(id));
     }
 }
