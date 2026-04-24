@@ -21,18 +21,41 @@ namespace ETicaretAPI.Persistence.Repositories
 
         public DbSet<T> Table => _context.Set<T>();
 
-        public IQueryable<T> GetAll()
-                => Table;
+        public IQueryable<T> GetAll(bool tracking=true)
+        {
+            var query=Table.AsQueryable();
+            if(!tracking)
+                query=query.AsNoTracking();
+            return query;
+        }
 
-        public IQueryable<T> GetWhere(Expression<Func<T, bool>> method)
-                => Table.Where(method);
+        public IQueryable<T> GetWhere(Expression<Func<T, bool>> method,bool tracking=true)
+        // => Table.Where(method); optimizasyon için tracking sistemi uygulayacağız
+        {
+            var query=Table.Where(method);
+            if(!tracking)
+                query=query.AsNoTracking();
+            return query;
+        }
 
-        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> method)
-                 =>await Table.FirstOrDefaultAsync(method); //asenkron olduğu için await ekledim.
+        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> method,bool tracking=true)
+        // =>await Table.FirstOrDefaultAsync(method); //asenkron olduğu için await ekledim.
+        {
+            var query=Table.AsQueryable();
+            if(!tracking)
+                query=query.AsNoTracking();
+            return await query.FirstOrDefaultAsync(method);
+        }
 
-        public async Task<T> GetByIdAsync(string id)
-             // =>await Table.FirstOrDefaultAsync(data=>data.Id==Guid.Parse(id));//Generic T olarak belirtiğimzde Id belirtmezdik çünkü burası hala spesifik değil genl bir fonksiyon yazmaya çalışıyoruz. T:class yerine T:BaseEntity yazdık bu da dmek oluyor ki çağrılan en kötü bir baseentitydir. yani illaki onun içinde olan bir prop burada görünecektir.
+        public async Task<T> GetByIdAsync(string id,bool tracking=true)
+        // =>await Table.FirstOrDefaultAsync(data=>data.Id==Guid.Parse(id));//Generic T olarak belirtiğimzde Id belirtmezdik çünkü burası hala spesifik değil genl bir fonksiyon yazmaya çalışıyoruz. T:class yerine T:BaseEntity yazdık bu da dmek oluyor ki çağrılan en kötü bir baseentitydir. yani illaki onun içinde olan bir prop burada görünecektir.
 
-             => await Table.FindAsync(Guid.Parse(id));
+        //=> await Table.FindAsync(Guid.Parse(id));
+        {
+            var query=Table.AsQueryable();
+            if(!tracking)
+                query=query.AsNoTracking();
+            return await query.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
+        }
     }
 }
