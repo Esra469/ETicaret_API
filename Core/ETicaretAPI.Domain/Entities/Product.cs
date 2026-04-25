@@ -11,7 +11,7 @@ namespace ETicaretAPI.Domain.Entities
     {
         public string Name { get; set; }
         public int Stock { get; set; }
-        public long Price { get; set; }
+        public float Price { get; set; }
 
         //order ile çoka çok ilişki var burada da bağıntı verilmek zorunda
         public ICollection<Order> Orders { get; set; } //bir ürünün birden çok siparişi olur demek oluyor.
