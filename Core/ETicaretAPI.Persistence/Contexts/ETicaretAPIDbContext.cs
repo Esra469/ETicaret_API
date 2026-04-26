@@ -1,4 +1,5 @@
 ﻿using ETicaretAPI.Domain.Entities;
+using ETicaretAPI.Domain.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,27 @@ namespace ETicaretAPI.Persistence.Contexts
 
         public DbSet<Order> Orders   { get; set; }
         public DbSet<Customer> Customers { get; set; }
+
+
+        //interceptor işlemleri için, update, delete vb  edilen işlemler savechanges dediğinde bu yapıya takılıyor. burda da yapmak istediğimz işlem olduktan sonra yolunda devam ediyor. SaveChanges işle gerçekleşiyor.
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            //ChangeTracker: Entityler üzerinden yapılan değişiklikler ya da eklenen verinin yakalnamasını sağlayan propertylerdir.Track edilen verileri yakalayıp elde etmemizi sağlar.
+
+            var datas = ChangeTracker.Entries<BaseEntity>();
+            foreach (var data in datas)
+            {
+                _ = data.State switch//datayı tutmamak için _ = yaptık
+                {
+                    //demek data state(durumu) ekleme (added) veya güncellem (modified) durumları kontrol edilir.yeni değer yani ilgili gelen verinin somut verisine entity üzerinden erişiyoruz. duruma göre de düzenleme işlemini yapıyoruz.
+                    EntityState.Added => data.Entity.CreatedDate = DateTime.UtcNow,
+                    EntityState.Modified=>data.Entity.UpdateDate = DateTime.UtcNow
+                };
+            
+            }
+
+            return await base.SaveChangesAsync(cancellationToken); //saveChanges tetiklerken task olduğu için await yazdık.
+        }
 
     }
 }

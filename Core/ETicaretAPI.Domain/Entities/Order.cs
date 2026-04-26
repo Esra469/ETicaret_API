@@ -9,7 +9,7 @@ namespace ETicaretAPI.Domain.Entities
 {
     public class Order:BaseEntity
     {
-        public int CustomerId { get; set; }//Bunu neden tanımaladığımıza bak
+        public Guid CustomerId { get; set; }//Bunu neden tanımaladığımıza bak
         public string Description  { get; set; }
         public string  Address { get; set; }
         //product ile aralarında bire çok ilişki olduğu için collectionlar ile bunu belirleyeceğiz
