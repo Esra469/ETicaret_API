@@ -32,7 +32,8 @@ namespace ETicaretAPI.Persistence.Contexts
                 {
                     //demek data state(durumu) ekleme (added) veya güncellem (modified) durumları kontrol edilir.yeni değer yani ilgili gelen verinin somut verisine entity üzerinden erişiyoruz. duruma göre de düzenleme işlemini yapıyoruz.
                     EntityState.Added => data.Entity.CreatedDate = DateTime.UtcNow,
-                    EntityState.Modified=>data.Entity.UpdateDate = DateTime.UtcNow
+                    EntityState.Modified=>data.Entity.UpdateDate = DateTime.UtcNow,
+                    _=>DateTime.UtcNow//Yukarıdakilerden herhangi biri değilse bunu döndür diyoruz.
                 };
             
             }
