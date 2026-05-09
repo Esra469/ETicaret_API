@@ -1,5 +1,6 @@
 ﻿using ETicaretAPI.Application.Abstractions;
 using ETicaretAPI.Application.Repositories;
+using ETicaretAPI.Application.RequestParameters;
 using ETicaretAPI.Application.ViewModels.Products;
 using ETicaretAPI.Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -47,23 +48,41 @@ namespace ETicaretAPI.API.Controllers
         //    return Ok(product);
         //}
 
-        [HttpGet]
-        public async Task<ActionResult> Get()
-        {
-            //var customerId = Guid.NewGuid();
-            //await _customerWriteRepository.AddAsync(new() { Id = customerId, Name = "Muiidddiiin" });
-            //await _orderWriteRepository.AddAsync(new() { Description = "bla bla bla 1", Address = "Ankara,çankaya", CustomerId = customerId });
-            //await _orderWriteRepository.AddAsync(new() { Description = "bla bla bla 2", Address = "Ankara,pursaklar", CustomerId = customerId });
-            //await _orderWriteRepository.SaveAsync();
+            [HttpGet]
+            public async Task<ActionResult> Get([FromQuery] Pagination pagination)
+            {
+                //var customerId = Guid.NewGuid();
+                //await _customerWriteRepository.AddAsync(new() { Id = customerId, Name = "Muiidddiiin" });
+                //await _orderWriteRepository.AddAsync(new() { Description = "bla bla bla 1", Address = "Ankara,çankaya", CustomerId = customerId });
+                //await _orderWriteRepository.AddAsync(new() { Description = "bla bla bla 2", Address = "Ankara,pursaklar", CustomerId = customerId });
+                //await _orderWriteRepository.SaveAsync();
 
 
-            //Order order = await _orderReadRepository.GetByIdAsync("a8e64f7b-f507-4bee-a1ad-573618c8e3d1");
-            //order.Address = "İstanbul";
-            //await _orderWriteRepository.SaveAsync();
+                //Order order = await _orderReadRepository.GetByIdAsync("a8e64f7b-f507-4bee-a1ad-573618c8e3d1");
+                //order.Address = "İstanbul";
+                //await _orderWriteRepository.SaveAsync();
+                
 
-            return Ok(_productReadRepository.GetAll(false));
 
-        }
+                var totalCount = _productReadRepository.GetAll(false).Count();
+                var products= _productReadRepository.GetAll(false).Skip(pagination.Page * pagination.Size).Take(pagination.Size).Select(p => new
+                {
+                    //Clinet gidcek veriler bu şekilde olsun istiyoruz.
+                    p.Id,
+                    p.Name,
+                    p.Stock,
+                    p.Price,
+                    p.CreatedDate,
+                    p.UpdateDate
+                }).ToList();
+
+                //cliente sadece product değil total count tarzında da türünde de veriler gönderiyor.
+                return Ok(new { 
+                    totalCount,
+                    products
+                });
+
+            }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
@@ -74,6 +93,9 @@ namespace ETicaretAPI.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(VM_Create_Product model)//dışarıdan bir şey gelecek bu entity olarak tanımlanmamalı o zamn viewmodel olarak veriyoruz.
         {
+
+          
+
             await _productWriteRepository.AddAsync(new()
             {
                 Name = model.Name,
