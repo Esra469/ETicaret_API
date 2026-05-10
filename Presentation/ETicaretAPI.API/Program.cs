@@ -32,6 +32,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+app.UseStaticFiles();//wwwroot midleware için kullanýlmasý gerekiyor.
 //midleware olarak çaðýrýlacak.
 app.UseCors();
 app.UseHttpsRedirection();
