@@ -1,4 +1,5 @@
 using ETicaretAPI.Application.Validators.Products;
+using ETicaretAPI.Infrastructure;
 using ETicaretAPI.Infrastructure.Filters;
 using ETicaretAPI.Persistence;
 using FluentValidation.AspNetCore;
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddPersistenceServices(); //oluþturduðumuz tüm servisler IoC containere eklenmiþ bir halde geldi.
+builder.Services.AddInfrastructureServices(); 
+
 
 builder.Services.AddCors(options=>options.AddDefaultPolicy(policy=>
  // policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod() //gelen istekleri kabul etme üzerne 
