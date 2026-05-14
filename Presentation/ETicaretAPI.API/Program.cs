@@ -1,6 +1,8 @@
+using ETicaretAPI.Application.Abstractions.Storage.Local;
 using ETicaretAPI.Application.Validators.Products;
 using ETicaretAPI.Infrastructure;
 using ETicaretAPI.Infrastructure.Filters;
+using ETicaretAPI.Infrastructure.Services.Storage.Local;
 using ETicaretAPI.Persistence;
 using FluentValidation.AspNetCore;
 
@@ -9,7 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddPersistenceServices(); //oluþturduðumuz tüm servisler IoC containere eklenmiþ bir halde geldi.
-builder.Services.AddInfrastructureServices(); 
+builder.Services.AddInfrastructureServices();
+
+//artýk mimari localstorageye göre iþleyecek demek oluyor.
+builder.Services.AddStorage<LocalStorage>();
 
 
 builder.Services.AddCors(options=>options.AddDefaultPolicy(policy=>

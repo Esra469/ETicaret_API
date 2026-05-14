@@ -13,7 +13,7 @@ namespace ETicaretAPI.Domain.Entities
         public string FileName { get; set; }
         public string Path { get; set; }
 
-
+        public string Storage { get; set; }
 
 
         //file ile ilgili entity de bir migration oluşturulurken kessinlikle gidip de updated date yi ekleme diyoruz. herhangi bir dosyanın update si olmaz.
