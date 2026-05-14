@@ -3,6 +3,7 @@ using System;
 using ETicaretAPI.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ETicaretAPI.Persistence.Migrations
 {
     [DbContext(typeof(ETicaretAPIDbContext))]
-    partial class ETicaretAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260514093556_mig_2")]
+    partial class mig_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,14 +55,6 @@ namespace ETicaretAPI.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -143,21 +137,18 @@ namespace ETicaretAPI.Persistence.Migrations
                     b.ToTable("OrderProduct");
                 });
 
-            modelBuilder.Entity("ETicaretAPI.Domain.Entities.InvoiceFile", b =>
-                {
-                    b.HasBaseType("ETicaretAPI.Domain.Entities.File");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.HasDiscriminator().HasValue("InvoiceFile");
-                });
-
             modelBuilder.Entity("ETicaretAPI.Domain.Entities.ProductImageFile", b =>
                 {
                     b.HasBaseType("ETicaretAPI.Domain.Entities.File");
 
                     b.HasDiscriminator().HasValue("ProductImageFile");
+                });
+
+            modelBuilder.Entity("ETicaretAPI.Domain.Entities.ProductImageFile+InvoiceFile", b =>
+                {
+                    b.HasBaseType("ETicaretAPI.Domain.Entities.File");
+
+                    b.HasDiscriminator().HasValue("InvoiceFile");
                 });
 
             modelBuilder.Entity("ETicaretAPI.Domain.Entities.Order", b =>

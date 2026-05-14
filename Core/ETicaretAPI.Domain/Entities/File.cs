@@ -1,0 +1,23 @@
+﻿using ETicaretAPI.Domain.Entities.Common;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ETicaretAPI.Domain.Entities
+{
+    public class File:BaseEntity
+    {
+        public string FileName { get; set; }
+        public string Path { get; set; }
+
+
+
+
+        //file ile ilgili entity de bir migration oluşturulurken kessinlikle gidip de updated date yi ekleme diyoruz. herhangi bir dosyanın update si olmaz.
+        [NotMapped]
+        public override DateTime UpdateDate { get => base.UpdateDate; set => base.UpdateDate = value; }
+    }
+}
